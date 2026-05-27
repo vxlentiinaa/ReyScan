@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>REYSCAN — Sistema de Inventario</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <div class="logo">♛ REY<span>SCAN</span></div>
+    <div class="nav-links">
+      <a href="index.html" class="active">Inicio</a>
+      <a href="pages/inventario.html">Inventario</a>
+      <a href="pages/movimientos.html">Movimientos</a>
+      <a href="pages/ubicaciones.html">Ubicaciones</a>
+    </div>
+    <div class="nav-brand">Bronces Rey</div>
+  </nav>
+
+  <!-- MAIN -->
+  <main class="container">
+
+    <div class="page-title">
+      <h1>Panel Principal</h1>
+      <div class="accent-line"></div><p class="subtitle">Sistema digital de inventario y localización de piezas</p>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-label">Stock Total</div>
+        <div class="stat-value">150.453</div>
+        <div class="stat-sub">piezas registradas</div>
+      </div>
+      <div class="stat-card warn">
+        <div class="stat-label">Alerta Stock Bajo</div>
+        <div class="stat-value">20</div>
+        <div class="stat-sub">piezas bajo mínimo</div>
+      </div>
+      <div class="stat-card danger">
+        <div class="stat-label">Sin Ubicación</div>
+        <div class="stat-value">45</div>
+        <div class="stat-sub">piezas sin asignar</div>
+      </div>
+      <div class="stat-card ok">
+        <div class="stat-label">Última Actualización</div>
+        <div class="stat-value" style="font-size:1.2rem">Hoy 10:23</div>
+        <div class="stat-sub">Valentina Ruz</div>
+      </div>
+    </div>
+
+    <!-- ACCIONES RÁPIDAS -->
+    <div class="section-title">Acciones rápidas</div>
+    <div class="actions-grid">
+      <a href="pages/inventario.html" class="action-card">
+        <div class="action-icon">🔍</div>
+        <div class="action-text">
+          <strong>Buscar Pieza</strong>
+          <span>Busca por nombre, código o material</span>
+        </div>
+      </a>
+      <a href="pages/movimientos.html#registrar" class="action-card accent">
+        <div class="action-icon">📦</div>
+        <div class="action-text">
+          <strong>Registrar Movimiento</strong>
+          <span>Entrada o salida de piezas</span>
+        </div>
+      </a>
+      <a href="pages/ubicaciones.html" class="action-card">
+        <div class="action-icon">📍</div>
+        <div class="action-text">
+          <strong>Ver Ubicaciones</strong>
+          <span>Mapa de estanterías</span>
+        </div>
+      </a>
+      <a href="pages/movimientos.html" class="action-card">
+        <div class="action-icon">🕐</div>
+        <div class="action-text">
+          <strong>Movimientos Recientes</strong>
+          <span>Historial de entradas y salidas</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- MOVIMIENTOS RECIENTES -->
+    <div class="section-title">Últimos movimientos</div>
+    <div class="table-wrapper">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Fecha</th>
+            <th>Pieza</th>
+            <th>Tipo</th>
+            <th>Cantidad</th>
+            <th>Responsable</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="muted">25/05/2026 10:23</td>
+            <td>Bocallave real bronceado</td>
+            <td><span class="badge salida">Salida</span></td>
+            <td>-20 uds</td>
+            <td>Valentina Ruz</td>
+          </tr>
+          <tr>
+            <td class="muted">24/05/2026 15:10</td>
+            <td>Buje Bronce Ø20×30</td>
+            <td><span class="badge entrada">Entrada</span></td>
+            <td>+50 uds</td>
+            <td>Anais Marschhausen</td>
+          </tr>
+          <tr>
+            <td class="muted">24/05/2026 09:45</td>
+            <td>Cerradura Tubular llave/llave</td>
+            <td><span class="badge salida">Salida</span></td>
+            <td>-30 uds</td>
+            <td>Sofía Cartes</td>
+          </tr>
+          <tr>
+            <td class="muted">23/05/2026 11:30</td>
+            <td>Asa embutida ovalada</td>
+            <td><span class="badge entrada">Entrada</span></td>
+            <td>+100 uds</td>
+            <td>Camila García</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <a href="pages/movimientos.html" class="link-more">Ver historial completo →</a>
+
+  </main>
+
+  <footer class="footer">
+    <span>♛ REYSCAN · Bronces Rey © 2026</span>
+    <span>Proyecto de Diseño Industrial — trabajo en proceso</span>
+  </footer>
+
+</body>
+</html>
