@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Inventario — REYSCAN</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+</head>
+<body>
+
+  <nav class="navbar">
+    <a href="../index.html" class="logo">♛ REY<span>SCAN</span></a>
+    <div class="nav-links">
+      <a href="../index.html">Inicio</a>
+      <a href="inventario.html" class="active">Inventario</a>
+      <a href="movimientos.html">Movimientos</a>
+      <a href="ubicaciones.html">Ubicaciones</a>
+    </div>
+    <div class="nav-brand">Bronces Rey</div>
+  </nav>
+
+  <main class="container">
+
+    <div class="page-title">
+      <h1>Inventario General</h1>
+      <p class="subtitle">Listado de piezas y componentes en planta</p>
+    </div>
+
+    <!-- BUSCADOR -->
+    <div class="search-bar">
+      <input type="text" id="search" placeholder="Buscar por nombre, código o material..." oninput="filtrar()"/>
+      <select id="filtro-material" onchange="filtrar()">
+        <option value="">Todos los materiales</option>
+        <option value="Bronce">Bronce</option>
+        <option value="Aluminio">Aluminio</option>
+        <option value="Zamac">Zamac</option>
+        <option value="Fierro">Fierro</option>
+      </select>
+      <select id="filtro-stock" onchange="filtrar()">
+        <option value="">Todo el stock</option>
+        <option value="bajo">Stock bajo</option>
+        <option value="ok">Stock OK</option>
+      </select>
+    </div>
+
+    <!-- TABLA -->
+    <div class="table-wrapper">
+      <table class="data-table" id="tabla-piezas">
+        <thead>
+          <tr>
+            <th>Código</th>
+            <th>Nombre</th>
+            <th>Material</th>
+            <th>Tipo</th>
+            <th>Ubicación</th>
+            <th>Stock</th>
+            <th>Estado</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="tabla-body">
+          <!-- renderizado por JS -->
+        </tbody>
+      </table>
+    </div>
+
+    <div id="no-results" style="display:none; text-align:center; padding:40px; color:var(--text3); font-size:13px;">
+      No se encontraron piezas con ese criterio.
+    </div>
+
+  </main>
+
+  <footer class="footer">
+    <span>♛ REYSCAN · Bronces Rey © 2026</span>
+    <span>Proyecto de Diseño Industrial — trabajo en proceso</span>
+  </footer>
+
+  <script src="../js/data.js"></script>
+  <script>
+    function renderTabla(lista) {
+      const body = document.getElementById('tabla-body');
+      const noRes = document.getElementById('no-results');
+      if (!lista.length) {
+        body.innerHTML = '';
+        noRes.style.display = 'block';
+        return;
+      }
+      noRes.style.display = 'none';
+      body.innerHTML = lista.map(p => {
+        const bajo = p.stock <= p.minStock;
+        const stockColor = p.stock <= p.minStock / 2 ? 'var(--danger)' : bajo ? 'var(--warning)' : 'var(--success)';
+        const badge = bajo ? '<span class="badge bajo">Stock bajo</span>' : '<span class="badge ok">OK</span>';
+        return `<tr>
+          <td class="muted">${p.code}</td>
+          <td><strong>${p.name}</strong></td>
+          <td>${p.material}</td>
+          <td class="muted">${p.tipo}</td>
+          <td><code style="background:var(--bg4);padding:2px 8px;border-radius:4px;font-size:11px;color:var(--accent)">${p.ubicacion}</code></td>
+          <td style="color:${stockColor};font-weight:700">${p.stock} uds</td>
+          <td>${badge}</td>
+          <td><a href="detalle.html?id=${p.id}" class="link-more" style="font-size:11px">Ver →</a></td>
+        </tr>`;
+      }).join('');
+    }
+
+    function filtrar() {
+      const q = document.getElementById('search').value.toLowerCase();
+      const mat = document.getElementById('filtro-material').value;
+      const st = document.getElementById('filtro-stock').value;
+      let lista = PIEZAS.filter(p => {
+        const matchQ = !q || p.name.toLowerCase().includes(q) || p.code.toLowerCase().includes(q) || p.material.toLowerCase().includes(q);
+        const matchM = !mat || p.material === mat;
+        const matchS = !st || (st === 'bajo' ? p.stock <= p.minStock : p.stock > p.minStock);
+        return matchQ && matchM && matchS;
+      });
+      renderTabla(lista);
+    }
+
+    renderTabla(PIEZAS);
+  </script>
+</body>
+</html>
