@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Iniciar sesión — REYSCAN</title>
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;600;700;800&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:      #1B3A6B;
+      --navy-dark: #122850;
+      --navy-mid:  #254D8E;
+      --gold:      #F5A623;
+      --gold-dark: #D4881A;
+      --gold-pale: #FEF3DC;
+      --bg:        #F4F6FA;
+      --white:     #FFFFFF;
+      --text:      #111827;
+      --text2:     #374151;
+      --text3:     #6B7280;
+      --border:    #D1D9E6;
+      --danger:    #991B1B;
+      --danger-bg: #FEE2E2;
+    }
+
+    body {
+      font-family: 'Open Sans', sans-serif;
+      background: var(--bg);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ---- TOP BAR ---- */
+    .topbar {
+      background: var(--navy);
+      height: 56px;
+      display: flex;
+      align-items: center;
+      padding: 0 32px;
+      box-shadow: 0 2px 8px rgba(27,58,107,0.3);
+    }
+    .logo {
+      font-family: 'Raleway', sans-serif;
+      font-size: 20px;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .logo .crown { color: var(--gold); }
+    .logo span   { color: var(--gold); }
+
+    /* ---- MAIN ---- */
+    main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 16px;
+    }
+
+    .login-wrapper {
+      width: 100%;
+      max-width: 420px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    /* ---- BRAND BLOCK ---- */
+    .brand-block {
+      text-align: center;
+    }
+    .brand-crown {
+      font-size: 44px;
+      color: var(--gold);
+      line-height: 1;
+      margin-bottom: 10px;
+      display: block;
+    }
+    .brand-title {
+      font-family: 'Raleway', sans-serif;
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--navy);
+      letter-spacing: 1px;
+    }
+    .brand-title span { color: var(--gold-dark); }
+    .brand-sub {
+      font-size: 13px;
+      color: var(--text3);
+      margin-top: 6px;
+      line-height: 1.5;
+    }
+
+    /* ---- CARD ---- */
+    .login-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-top: 4px solid var(--gold);
+      border-radius: 12px;
+      padding: 32px;
+      box-shadow: 0 4px 24px rgba(27,58,107,0.08);
+    }
+
+    .card-title {
+      font-family: 'Raleway', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 6px;
+    }
+    .card-sub {
+      font-size: 12px;
+      color: var(--text3);
+      margin-bottom: 24px;
+    }
+
+    /* ---- FORM ---- */
+    .form-group {
+      margin-bottom: 18px;
+    }
+    .form-group label {
+      display: block;
+      font-family: 'Raleway', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--navy);
+      margin-bottom: 6px;
+    }
+    .input-wrap {
+      position: relative;
+    }
+    .input-wrap .icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 16px;
+      pointer-events: none;
+    }
+    .form-group input {
+      width: 100%;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 11px 14px 11px 38px;
+      color: var(--text);
+      font-family: 'Open Sans', sans-serif;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .form-group input:focus {
+      border-color: var(--navy-mid);
+      box-shadow: 0 0 0 3px rgba(37,77,142,0.12);
+      background: var(--white);
+    }
+    .form-group input.error {
+      border-color: var(--danger);
+      box-shadow: 0 0 0 3px rgba(153,27,27,0.1);
+    }
+    .form-group input::placeholder { color: var(--text3); }
+
+    /* rut hint */
+    .rut-hint {
+      font-size: 10px;
+      color: var(--text3);
+      margin-top: 4px;
+      font-family: 'Open Sans', sans-serif;
+    }
+
+    /* ---- ERROR MSG ---- */
+    .error-msg {
+      display: none;
+      background: var(--danger-bg);
+      border: 1px solid #FECACA;
+      border-radius: 7px;
+      padding: 10px 14px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--danger);
+      margin-bottom: 16px;
+      font-family: 'Open Sans', sans-serif;
+    }
+    .error-msg.show { display: flex; align-items: center; gap: 8px; }
+
+    /* ---- SUBMIT ---- */
+    .btn-submit {
+      width: 100%;
+      background: var(--navy);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 13px;
+      font-family: 'Raleway', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
+      margin-top: 4px;
+    }
+    .btn-submit:hover {
+      background: var(--navy-dark);
+      box-shadow: 0 4px 16px rgba(27,58,107,0.3);
+    }
+    .btn-submit:active { transform: scale(0.99); }
+    .btn-submit:disabled {
+      background: var(--text3);
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    /* loading spinner inline */
+    .btn-submit .spinner {
+      display: none;
+      width: 14px;
+      height: 14px;
+      border: 2px solid rgba(255,255,255,0.4);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      vertical-align: middle;
+      margin-right: 8px;
+    }
+    .btn-submit.loading .spinner { display: inline-block; }
+    .btn-submit.loading .btn-text { opacity: 0.7; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ---- DIVIDER ---- */
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 20px 0 16px;
+    }
+    .divider::before, .divider::after {
+      content: '';
+      flex: 1;
+      border-top: 1px solid var(--border);
+    }
+    .divider span {
+      font-size: 10px;
+      color: var(--text3);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      white-space: nowrap;
+    }
+
+    /* ---- WORKERS LIST (acceso rápido) ---- */
+    .workers-title {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--text3);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+      font-family: 'Raleway', sans-serif;
+    }
+    .workers-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+    }
+    .worker-btn {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: all 0.15s;
+      font-family: 'Open Sans', sans-serif;
+      text-align: left;
+    }
+    .worker-btn:hover {
+      border-color: var(--gold);
+      background: var(--gold-pale);
+    }
+    .worker-avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--navy);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-family: 'Raleway', sans-serif;
+    }
+    .worker-info { min-width: 0; }
+    .worker-name {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .worker-rut {
+      font-size: 10px;
+      color: var(--text3);
+      margin-top: 1px;
+    }
+
+    /* ---- FOOTER ---- */
+    footer {
+      background: var(--navy);
+      border-top: 3px solid var(--gold);
+      padding: 14px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    footer span { font-size: 11px; color: rgba(255,255,255,0.45); }
+    footer span:first-child { color: rgba(255,255,255,0.75); font-weight: 600; }
+
+    /* ---- TRANSITION OUT ---- */
+    body.leaving {
+      animation: fadeOut 0.4s ease forwards;
+    }
+    @keyframes fadeOut {
+      to { opacity: 0; transform: translateY(-8px); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="topbar">
+    <div class="logo">
+      <span class="crown">♛</span> REY<span>SCAN</span>
+    </div>
+  </div>
+
+  <main>
+    <div class="login-wrapper">
+
+      <!-- Marca -->
+      <div class="brand-block">
+        <span class="brand-crown">♛</span>
+        <div class="brand-title">REY<span>SCAN</span></div>
+        <p class="brand-sub">Sistema digital de inventario y localización<br>de piezas · Bronces Rey, San Joaquín</p>
+      </div>
+
+      <!-- Card login -->
+      <div class="login-card">
+        <div class="card-title">Ingresa para continuar</div>
+        <p class="card-sub">Usa tu nombre y RUT de trabajador registrado en Bronces Rey</p>
+
+        <div id="error-msg" class="error-msg">
+          <span>⚠</span>
+          <span id="error-text">Completa todos los campos.</span>
+        </div>
+
+        <div class="form-group">
+          <label for="input-nombre">Nombre completo</label>
+          <div class="input-wrap">
+            <span class="icon">👤</span>
+            <input
+              type="text"
+              id="input-nombre"
+              placeholder="Ej: Valentina Ruz"
+              autocomplete="name"
+              oninput="clearError()"
+            />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="input-rut">RUT</label>
+          <div class="input-wrap">
+            <span class="icon">🪪</span>
+            <input
+              type="text"
+              id="input-rut"
+              placeholder="Ej: 12.345.678-9"
+              maxlength="12"
+              autocomplete="off"
+              oninput="formatRut(this); clearError()"
+              onkeydown="if(event.key==='Enter') handleLogin()"
+            />
+          </div>
+          <div class="rut-hint">Formato: 12.345.678-9</div>
+        </div>
+
+        <button class="btn-submit" id="btn-login" onclick="handleLogin()">
+          <span class="spinner"></span>
+          <span class="btn-text">Ingresar al sistema</span>
+        </button>
+
+        <div class="divider"><span>Acceso rápido</span></div>
+
+        <div class="workers-title">Selecciona tu perfil</div>
+        <div class="workers-grid" id="workers-grid"></div>
+      </div>
+
+    </div>
+  </main>
+
+  <footer>
+    <span>♛ REYSCAN · Bronces Rey © 2026</span>
+    <span>Proyecto Diseño Industrial — trabajo en proceso</span>
+  </footer>
+
+  <script>
+    // ---- Trabajadores registrados ----
+    const TRABAJADORES = [
+      { nombre: 'Valentina Ruz',      rut: '15.234.567-8', iniciales: 'VR' },
+      { nombre: 'Anais Marschhausen', rut: '16.890.123-4', iniciales: 'AM' },
+      { nombre: 'Sofía Cartes',       rut: '17.456.789-0', iniciales: 'SC' },
+      { nombre: 'Camila García',      rut: '14.321.098-7', iniciales: 'CG' },
+    ];
+
+    // ---- Render acceso rápido ----
+    document.getElementById('workers-grid').innerHTML = TRABAJADORES.map((w, i) => `
+      <button class="worker-btn" onclick="quickLogin(${i})">
+        <div class="worker-avatar">${w.iniciales}</div>
+        <div class="worker-info">
+          <div class="worker-name">${w.nombre}</div>
+          <div class="worker-rut">${w.rut}</div>
+        </div>
+      </button>
+    `).join('');
+
+    // ---- Acceso rápido ----
+    function quickLogin(i) {
+      const w = TRABAJADORES[i];
+      document.getElementById('input-nombre').value = w.nombre;
+      document.getElementById('input-rut').value    = w.rut;
+      clearError();
+      setTimeout(() => handleLogin(), 120);
+    }
+
+    // ---- Formato RUT en tiempo real ----
+    function formatRut(input) {
+      let v = input.value.replace(/[^0-9kK]/g, '').toUpperCase();
+      if (v.length > 9) v = v.slice(0, 9);
+      if (v.length <= 1) { input.value = v; return; }
+      const dv   = v.slice(-1);
+      const body = v.slice(0, -1);
+      let fmt = '';
+      if (body.length > 6)      fmt = body.slice(0,-6) + '.' + body.slice(-6,-3) + '.' + body.slice(-3);
+      else if (body.length > 3) fmt = body.slice(0,-3) + '.' + body.slice(-3);
+      else                       fmt = body;
+      input.value = fmt + '-' + dv;
+    }
+
+    // ---- Validación RUT chileno ----
+    function validarRut(rut) {
+      const clean = rut.replace(/[.\-]/g, '').toUpperCase();
+      if (clean.length < 2) return false;
+      const body = clean.slice(0, -1);
+      const dv   = clean.slice(-1);
+      if (!/^\d+$/.test(body)) return false;
+      let sum = 0, mul = 2;
+      for (let i = body.length - 1; i >= 0; i--) {
+        sum += parseInt(body[i]) * mul;
+        mul = mul === 7 ? 2 : mul + 1;
+      }
+      const expected = 11 - (sum % 11);
+      const expChar  = expected === 11 ? '0' : expected === 10 ? 'K' : String(expected);
+      return dv === expChar;
+    }
+
+    // ---- Login ----
+    function handleLogin() {
+      const nombre = document.getElementById('input-nombre').value.trim();
+      const rut    = document.getElementById('input-rut').value.trim();
+      const btn    = document.getElementById('btn-login');
+
+      clearError();
+
+      if (!nombre) {
+        showError('Por favor ingresa tu nombre completo.');
+        document.getElementById('input-nombre').classList.add('error');
+        document.getElementById('input-nombre').focus();
+        return;
+      }
+      if (!rut) {
+        showError('Por favor ingresa tu RUT.');
+        document.getElementById('input-rut').classList.add('error');
+        document.getElementById('input-rut').focus();
+        return;
+      }
+      if (!validarRut(rut)) {
+        showError('El RUT ingresado no es válido. Revisa el formato: 12.345.678-9');
+        document.getElementById('input-rut').classList.add('error');
+        document.getElementById('input-rut').focus();
+        return;
+      }
+
+      // Todo OK — guardar sesión y redirigir
+      btn.disabled = true;
+      btn.classList.add('loading');
+      btn.querySelector('.btn-text').textContent = 'Ingresando...';
+
+      sessionStorage.setItem('reyscan_usuario', JSON.stringify({ nombre, rut, hora: new Date().toLocaleTimeString('es-CL', {hour:'2-digit', minute:'2-digit'}) }));
+
+      setTimeout(() => {
+        document.body.classList.add('leaving');
+        setTimeout(() => { window.location.href = 'index.html'; }, 400);
+      }, 700);
+    }
+
+    function showError(msg) {
+      document.getElementById('error-text').textContent = msg;
+      document.getElementById('error-msg').classList.add('show');
+    }
+    function clearError() {
+      document.getElementById('error-msg').classList.remove('show');
+      document.getElementById('input-nombre').classList.remove('error');
+      document.getElementById('input-rut').classList.remove('error');
+    }
+
+    // Si ya hay sesión activa, redirigir directo
+    if (sessionStorage.getItem('reyscan_usuario')) {
+      window.location.href = 'index.html';
+    }
+  </script>
+
+</body>
+</html>
