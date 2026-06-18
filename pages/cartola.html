@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cartola Mensual — REYSCAN</title>
+  <link rel="stylesheet" href="../css/style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;600;700;800&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    /* ---- SELECTOR MES ---- */
+    .mes-selector {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+    }
+    .mes-label {
+      font-family: 'Raleway', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text3);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+    .mes-btn {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      padding: 7px 16px;
+      font-family: 'Raleway', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text2);
+      cursor: pointer;
+      transition: all 0.18s;
+      letter-spacing: 0.3px;
+    }
+    .mes-btn:hover  { border-color: var(--navy-mid); color: var(--navy); }
+    .mes-btn.active { background: var(--navy); border-color: var(--navy); color: #fff; }
+    .mes-nav {
+      width: 32px; height: 32px;
+      border-radius: 7px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; font-size: 16px; color: var(--text2);
+      transition: all 0.18s;
+    }
+    .mes-nav:hover { border-color: var(--navy); color: var(--navy); }
+
+    /* ---- KPI ROW ---- */
+    .kpi-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .kpi {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px 18px;
+      position: relative;
+      overflow: hidden;
+      transition: box-shadow 0.2s;
+    }
+    .kpi:hover { box-shadow: 0 4px 16px rgba(27,58,107,0.1); }
+    .kpi::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+    }
+    .kpi.entrada::before { background: var(--success, #166534); }
+    .kpi.salida::before  { background: var(--danger, #991B1B); }
+    .kpi.neto::before    { background: var(--navy); }
+    .kpi.ops::before     { background: var(--gold); }
+    .kpi-icon { font-size: 18px; margin-bottom: 6px; }
+    .kpi-label {
+      font-size: 9px; font-weight: 700;
+      letter-spacing: 1.5px; text-transform: uppercase;
+      color: var(--text3); margin-bottom: 6px;
+      font-family: 'Open Sans', sans-serif;
+    }
+    .kpi-value {
+      font-family: 'Raleway', sans-serif;
+      font-size: 28px; font-weight: 800; line-height: 1;
+    }
+    .kpi.entrada .kpi-value { color: #166534; }
+    .kpi.salida  .kpi-value { color: #991B1B; }
+    .kpi.neto    .kpi-value { color: var(--navy); }
+    .kpi.ops     .kpi-value { color: var(--gold-dark); }
+    .kpi-sub { font-size: 10px; color: var(--text3); margin-top: 4px; }
+
+    /* ---- GRAFICO DE BARRAS ---- */
+    .chart-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    .chart-title {
+      font-family: 'Raleway', sans-serif;
+      font-size: 13px; font-weight: 700;
+      color: var(--navy); margin-bottom: 4px;
+    }
+    .chart-sub {
+      font-size: 11px; color: var(--text3); margin-bottom: 18px;
+    }
+    .chart-wrap {
+      width: 100%; overflow-x: auto;
+    }
+    canvas { display: block; }
+
+    .legend-row {
+      display: flex; gap: 18px; margin-top: 12px; flex-wrap: wrap;
+    }
+    .legend-item {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 11px; color: var(--text2);
+      font-family: 'Open Sans', sans-serif;
+    }
+    .legend-dot {
+      width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0;
+    }
+
+    /* ---- TABLA CARTOLA ---- */
+    .cartola-header {
+      display: flex; align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px; flex-wrap: wrap; gap: 10px;
+    }
+    .print-btn {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      padding: 7px 16px;
+      font-family: 'Raleway', sans-serif;
+      font-size: 11px; font-weight: 700;
+      color: var(--text2); cursor: pointer;
+      display: flex; align-items: center; gap: 6px;
+      transition: all 0.18s;
+    }
+    .print-btn:hover { border-color: var(--navy); color: var(--navy); }
+
+    .data-table .num-entrada { color: #166534; font-weight: 700; font-family: 'Raleway', sans-serif; }
+    .data-table .num-salida  { color: #991B1B; font-weight: 700; font-family: 'Raleway', sans-serif; }
+    .data-table .total-row td { background: var(--bg3) !important; font-weight: 700; border-top: 2px solid var(--border2); }
+    .data-table .total-row td:first-child { font-family: 'Raleway', sans-serif; color: var(--navy); }
+
+    /* Separadores de fecha en tabla */
+    .date-sep td {
+      background: var(--bg2) !important;
+      font-size: 10px !important;
+      font-weight: 700 !important;
+      color: var(--text3) !important;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 6px 16px !important;
+      font-family: 'Raleway', sans-serif !important;
+    }
+
+    /* Resumen por pieza */
+    .pieza-bars { margin-top: 10px; }
+    .pieza-bar-row {
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 10px;
+    }
+    .pieza-bar-label {
+      width: 180px; flex-shrink: 0;
+      font-size: 11px; color: var(--text2);
+      font-family: 'Open Sans', sans-serif;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .pieza-bar-track {
+      flex: 1; height: 20px;
+      background: var(--bg3);
+      border-radius: 4px;
+      overflow: hidden;
+      display: flex;
+    }
+    .pieza-bar-e {
+      height: 100%;
+      background: #DCFCE7;
+      border-right: 1px solid #86EFAC;
+      display: flex; align-items: center; justify-content: flex-end;
+      padding-right: 4px;
+      font-size: 9px; font-weight: 700; color: #166534;
+      transition: width 0.5s ease;
+      min-width: 0;
+    }
+    .pieza-bar-s {
+      height: 100%;
+      background: #FEE2E2;
+      display: flex; align-items: center; justify-content: flex-start;
+      padding-left: 4px;
+      font-size: 9px; font-weight: 700; color: #991B1B;
+      transition: width 0.5s ease;
+      min-width: 0;
+    }
+    .pieza-bar-nums {
+      width: 80px; flex-shrink: 0;
+      font-size: 10px; color: var(--text3);
+      text-align: right;
+      font-family: 'Open Sans', sans-serif;
+    }
+
+    @media print {
+      .navbar, .mes-selector, .print-btn, footer, .chart-card { display: none !important; }
+      .container { padding: 0 !important; }
+      .page-title { margin-bottom: 16px !important; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <a href="../index.html" class="logo"><span class="logo-crown">♛</span> REY<span>SCAN</span></a>
+  <div class="nav-links">
+    <a href="../index.html">Inicio</a>
+    <a href="inventario.html">Inventario</a>
+    <a href="movimientos.html">Movimientos</a>
+    <a href="ubicaciones.html">Ubicaciones</a>
+    <a href="cartola.html" class="active">Cartola</a>
+  </div>
+  <div class="nav-brand">Bronces Rey</div>
+</nav>
+
+<main class="container">
+
+  <div class="page-title">
+    <h1>Cartola Mensual</h1>
+    <div class="gold-line"></div>
+    <p class="subtitle">Movimiento de piezas por mes — entradas y salidas del almacén</p>
+  </div>
+
+  <!-- SELECTOR DE MES -->
+  <div class="mes-selector">
+    <span class="mes-label">Período</span>
+    <div class="mes-nav" onclick="cambiarMes(-1)" title="Mes anterior">‹</div>
+    <div id="meses-btns"></div>
+    <div class="mes-nav" onclick="cambiarMes(1)" title="Mes siguiente">›</div>
+  </div>
+
+  <!-- KPIs -->
+  <div class="kpi-row" id="kpi-row"></div>
+
+  <!-- GRÁFICO BARRAS POR DÍA -->
+  <div class="chart-card">
+    <div class="chart-title">Actividad diaria del mes</div>
+    <div class="chart-sub">Unidades que entraron y salieron cada día del período seleccionado</div>
+    <div class="chart-wrap">
+      <canvas id="chart-diario" height="160"></canvas>
+    </div>
+    <div class="legend-row">
+      <div class="legend-item"><div class="legend-dot" style="background:#DCFCE7;border:1px solid #86EFAC"></div> Entradas</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#FEE2E2;border:1px solid #FECACA"></div> Salidas</div>
+    </div>
+  </div>
+
+  <!-- RESUMEN POR PIEZA -->
+  <div class="chart-card">
+    <div class="chart-title">Movimiento por pieza</div>
+    <div class="chart-sub">Comparativa de entradas vs salidas por tipo de pieza en el período</div>
+    <div class="pieza-bars" id="pieza-bars"></div>
+  </div>
+
+  <!-- TABLA CARTOLA DETALLADA -->
+  <div class="cartola-header">
+    <div class="section-title" style="margin:0">Detalle de movimientos</div>
+    <button class="print-btn" onclick="window.print()">🖨 Imprimir cartola</button>
+  </div>
+
+  <div class="table-wrapper">
+    <table class="data-table" id="tabla-cartola">
+      <thead>
+        <tr>
+          <th>Fecha</th>
+          <th>Pieza</th>
+          <th>Código</th>
+          <th>Tipo</th>
+          <th>Cantidad</th>
+          <th>Responsable</th>
+          <th>Observación</th>
+        </tr>
+      </thead>
+      <tbody id="cartola-body"></tbody>
+    </table>
+  </div>
+  <div id="no-movs" style="display:none;text-align:center;padding:40px;color:var(--text3);font-size:13px">
+    Sin movimientos registrados en este período.
+  </div>
+
+</main>
+
+<footer class="footer">
+  <span>♛ REYSCAN · Bronces Rey © 2026</span>
+  <span>Proyecto Diseño Industrial — trabajo en proceso</span>
+</footer>
+
+<script src="../js/data.js"></script>
+<script src="../js/session.js"></script>
+<script>
+// ---- Constantes de meses ----
+const MESES_ES = ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
+                  'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+
+// Detectar meses disponibles en los datos
+function getMesesDisponibles() {
+  const set = new Set();
+  MOVIMIENTOS.forEach(m => {
+    const [d, mes, anio] = m.fecha.split(' ')[0].split('/');
+    set.add(`${anio}-${mes}`);
+  });
+  return Array.from(set).sort().reverse(); // más reciente primero
+}
+
+let MESES_DISP = getMesesDisponibles();
+let idxMesActual = 0; // índice en MESES_DISP
+
+// ---- Parsear fecha ----
+function parseFecha(fechaStr) {
+  const [dmy] = fechaStr.split(' ');
+  const [d, m, a] = dmy.split('/');
+  return { dia: parseInt(d), mes: parseInt(m), anio: parseInt(a), clave: `${a}-${m}` };
+}
+
+// ---- Filtrar movimientos del mes seleccionado ----
+function movsDelMes(clave) {
+  return MOVIMIENTOS.filter(m => parseFecha(m.fecha).clave === clave);
+}
+
+// ---- Nombres de pieza ----
+const NOMBRES = {};
+PIEZAS.forEach(p => NOMBRES[p.id] = p);
+
+// ---- Render selector meses ----
+function renderMeses() {
+  const cont = document.getElementById('meses-btns');
+  cont.innerHTML = MESES_DISP.map((c, i) => {
+    const [a, m] = c.split('-');
+    return `<button class="mes-btn ${i===idxMesActual?'active':''}" onclick="selMes(${i})">${MESES_ES[parseInt(m)-1]} ${a}</button>`;
+  }).join('');
+}
+
+function selMes(i) {
+  idxMesActual = Math.max(0, Math.min(MESES_DISP.length-1, i));
+  renderTodo();
+}
+function cambiarMes(dir) { selMes(idxMesActual + dir); }
+
+// ---- KPIs ----
+function renderKPIs(movs) {
+  let totalE = 0, totalS = 0;
+  movs.forEach(m => { if(m.tipo==='entrada') totalE+=m.cantidad; else totalS+=m.cantidad; });
+  const neto = totalE - totalS;
+  const ops  = movs.length;
+
+  document.getElementById('kpi-row').innerHTML = `
+    <div class="kpi entrada">
+      <div class="kpi-icon">📥</div>
+      <div class="kpi-label">Total entradas</div>
+      <div class="kpi-value">+${totalE.toLocaleString('es-CL')}</div>
+      <div class="kpi-sub">unidades ingresadas</div>
+    </div>
+    <div class="kpi salida">
+      <div class="kpi-icon">📤</div>
+      <div class="kpi-label">Total salidas</div>
+      <div class="kpi-value">-${totalS.toLocaleString('es-CL')}</div>
+      <div class="kpi-sub">unidades despachadas</div>
+    </div>
+    <div class="kpi neto">
+      <div class="kpi-icon">${neto>=0?'📈':'📉'}</div>
+      <div class="kpi-label">Saldo neto</div>
+      <div class="kpi-value" style="color:${neto>=0?'var(--success)':'var(--danger)'}">${neto>=0?'+':''}${neto.toLocaleString('es-CL')}</div>
+      <div class="kpi-sub">diferencia del período</div>
+    </div>
+    <div class="kpi ops">
+      <div class="kpi-icon">📋</div>
+      <div class="kpi-label">Operaciones</div>
+      <div class="kpi-value">${ops}</div>
+      <div class="kpi-sub">movimientos registrados</div>
+    </div>
+  `;
+}
+
+// ---- Gráfico de barras diario ----
+let chartInst = null;
+function renderChart(movs, clave) {
+  const [anio, mes] = clave.split('-').map(Number);
+  const diasEnMes = new Date(anio, mes, 0).getDate();
+  const entradas = Array(diasEnMes).fill(0);
+  const salidas  = Array(diasEnMes).fill(0);
+
+  movs.forEach(m => {
+    const f = parseFecha(m.fecha);
+    if (m.tipo === 'entrada') entradas[f.dia-1] += m.cantidad;
+    else                      salidas[f.dia-1]  += m.cantidad;
+  });
+
+  const labels = Array.from({length: diasEnMes}, (_,i) => String(i+1));
+  const canvas = document.getElementById('chart-diario');
+  canvas.width  = canvas.parentElement.clientWidth || 600;
+  canvas.height = 160;
+  const ctx = canvas.getContext('2d');
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  const W = canvas.width, H = canvas.height;
+  const padL=36, padR=12, padT=12, padB=24;
+  const chartW = W - padL - padR;
+  const chartH = H - padT - padB;
+  const barW   = Math.max(4, Math.floor(chartW / diasEnMes) - 3);
+  const maxVal = Math.max(...entradas, ...salidas, 1);
+
+  // Grid lines
+  ctx.strokeStyle = '#E8EDF5';
+  ctx.lineWidth = 0.8;
+  for (let i=0; i<=4; i++) {
+    const y = padT + chartH - (chartH * i / 4);
+    ctx.beginPath(); ctx.moveTo(padL, y); ctx.lineTo(W-padR, y); ctx.stroke();
+    ctx.fillStyle = '#9CA3AF';
+    ctx.font = '9px Open Sans, sans-serif';
+    ctx.textAlign = 'right';
+    ctx.fillText(Math.round(maxVal*i/4), padL-4, y+3);
+  }
+
+  // Barras
+  for (let d=0; d<diasEnMes; d++) {
+    const x    = padL + (d / diasEnMes) * chartW + (chartW/diasEnMes - barW)/2;
+    const hE   = (entradas[d] / maxVal) * chartH;
+    const hS   = (salidas[d]  / maxVal) * chartH;
+
+    // Entrada (verde)
+    if (entradas[d] > 0) {
+      ctx.fillStyle = '#DCFCE7';
+      ctx.strokeStyle = '#86EFAC';
+      ctx.lineWidth = 0.8;
+      ctx.beginPath();
+      ctx.roundRect(x, padT + chartH - hE, barW/2 - 1, hE, [3,3,0,0]);
+      ctx.fill(); ctx.stroke();
+    }
+    // Salida (rojo)
+    if (salidas[d] > 0) {
+      ctx.fillStyle = '#FEE2E2';
+      ctx.strokeStyle = '#FECACA';
+      ctx.lineWidth = 0.8;
+      ctx.beginPath();
+      ctx.roundRect(x + barW/2, padT + chartH - hS, barW/2 - 1, hS, [3,3,0,0]);
+      ctx.fill(); ctx.stroke();
+    }
+
+    // Eje X — solo cada 5 días
+    if ((d+1) % 5 === 0 || d === 0) {
+      ctx.fillStyle = '#9CA3AF';
+      ctx.font = '9px Open Sans, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(d+1, x + barW/2, H - 4);
+    }
+  }
+}
+
+// ---- Barras por pieza ----
+function renderPiezaBars(movs) {
+  const map = {};
+  movs.forEach(m => {
+    if (!map[m.pieza]) map[m.pieza] = { e: 0, s: 0 };
+    if (m.tipo === 'entrada') map[m.pieza].e += m.cantidad;
+    else                      map[m.pieza].s += m.cantidad;
+  });
+
+  const items = Object.entries(map).sort((a,b) => (b[1].e+b[1].s) - (a[1].e+a[1].s));
+  const maxVal = Math.max(...items.map(([,v]) => v.e + v.s), 1);
+
+  document.getElementById('pieza-bars').innerHTML = items.map(([id, v]) => {
+    const nombre = NOMBRES[id]?.name || id;
+    const pE = Math.round((v.e / maxVal) * 100);
+    const pS = Math.round((v.s / maxVal) * 100);
+    return `
+      <div class="pieza-bar-row">
+        <div class="pieza-bar-label" title="${nombre}">${nombre}</div>
+        <div class="pieza-bar-track">
+          <div class="pieza-bar-e" style="width:${pE}%">${v.e>0?v.e:''}</div>
+          <div class="pieza-bar-s" style="width:${pS}%">${v.s>0?v.s:''}</div>
+        </div>
+        <div class="pieza-bar-nums">+${v.e} / -${v.s}</div>
+      </div>`;
+  }).join('') || '<p style="color:var(--text3);font-size:12px">Sin movimientos.</p>';
+}
+
+// ---- Tabla cartola ----
+function renderTablaCartola(movs) {
+  const cuerpo = document.getElementById('cartola-body');
+  const noMovs = document.getElementById('no-movs');
+
+  if (!movs.length) {
+    cuerpo.innerHTML = '';
+    noMovs.style.display = 'block';
+    document.querySelector('.table-wrapper').style.display = 'none';
+    return;
+  }
+  noMovs.style.display = 'none';
+  document.querySelector('.table-wrapper').style.display = 'block';
+
+  // Ordenar por fecha desc
+  const sorted = [...movs].sort((a,b) => {
+    const fa = parseFecha(a.fecha), fb = parseFecha(b.fecha);
+    return fb.dia - fa.dia;
+  });
+
+  // Agrupar por día
+  let lastDia = null;
+  let totalE = 0, totalS = 0;
+  let html = '';
+
+  sorted.forEach(m => {
+    const f = parseFecha(m.fecha);
+    const diaKey = `${f.dia}/${String(f.mes).padStart(2,'0')}/${f.anio}`;
+    if (diaKey !== lastDia) {
+      html += `<tr class="date-sep"><td colspan="7">📅 ${f.dia} de ${MESES_ES[f.mes-1]} ${f.anio}</td></tr>`;
+      lastDia = diaKey;
+    }
+    const nombre = NOMBRES[m.pieza]?.name || m.pieza;
+    const code   = NOMBRES[m.pieza]?.code || m.pieza;
+    if (m.tipo==='entrada') totalE += m.cantidad; else totalS += m.cantidad;
+    html += `<tr>
+      <td class="muted">${m.fecha}</td>
+      <td><strong>${nombre}</strong></td>
+      <td class="muted">${code}</td>
+      <td><span class="badge ${m.tipo}">${m.tipo}</span></td>
+      <td class="${m.tipo==='entrada'?'num-entrada':'num-salida'}">${m.tipo==='entrada'?'+':'-'}${m.cantidad} uds</td>
+      <td>${m.responsable}</td>
+      <td class="muted">${m.observacion}</td>
+    </tr>`;
+  });
+
+  // Fila de totales
+  html += `<tr class="total-row">
+    <td colspan="3">TOTALES DEL PERÍODO</td>
+    <td><span class="badge entrada">entradas</span></td>
+    <td class="num-entrada">+${totalE} uds</td>
+    <td></td><td></td>
+  </tr>
+  <tr class="total-row">
+    <td colspan="3"></td>
+    <td><span class="badge salida">salidas</span></td>
+    <td class="num-salida">-${totalS} uds</td>
+    <td></td><td></td>
+  </tr>`;
+
+  cuerpo.innerHTML = html;
+}
+
+// ---- Render completo ----
+function renderTodo() {
+  const clave = MESES_DISP[idxMesActual];
+  const movs  = movsDelMes(clave);
+  renderMeses();
+  renderKPIs(movs);
+  renderChart(movs, clave);
+  renderPiezaBars(movs);
+  renderTablaCartola(movs);
+}
+
+// Esperar DOM listo
+document.addEventListener('DOMContentLoaded', () => {
+  // Agregar polyfill para roundRect si no existe
+  if (!CanvasRenderingContext2D.prototype.roundRect) {
+    CanvasRenderingContext2D.prototype.roundRect = function(x,y,w,h,r) {
+      if (w < 2*r) r = w/2;
+      if (h < 2*r) r = h/2;
+      this.moveTo(x+r,y); this.lineTo(x+w-r,y);
+      this.quadraticCurveTo(x+w,y,x+w,y+r); this.lineTo(x+w,y+h-r);
+      this.quadraticCurveTo(x+w,y+h,x+w-r,y+h); this.lineTo(x+r,y+h);
+      this.quadraticCurveTo(x,y+h,x,y+h-r); this.lineTo(x,y+r);
+      this.quadraticCurveTo(x,y,x+r,y);
+      return this;
+    };
+  }
+  renderTodo();
+  window.addEventListener('resize', () => {
+    const clave = MESES_DISP[idxMesActual];
+    renderChart(movsDelMes(clave), clave);
+  });
+});
+</script>
+</body>
+</html>
