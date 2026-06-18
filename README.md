@@ -33,6 +33,7 @@ Interfaz digital que permite a los trabajadores consultar en tiempo real la disp
 | `pages/detalle.html` | Ficha individual de cada pieza |
 | `pages/movimientos.html` | Historial + formulario para registrar entradas/salidas |
 | `pages/ubicaciones.html` | Mapa visual de estanterías |
+| `pahes/cartola.html`| Cartola que detalla los movimientos de las piezas|
 
 ## Estructura de archivos
 
@@ -48,6 +49,7 @@ reyscan/
     ├── detalle.html
     ├── movimientos.html
     └── ubicaciones.html
+    └── cartola.html
 ```
 
 ---
@@ -71,7 +73,7 @@ Ejemplo: `A-01-02` → Estantería A / Nivel 01 / Caja 02
 
 ---
 
-## Próximas mejoras (roadmap)
+## Próximas mejoras
 
 - [ ] Escaneo QR real con cámara del dispositivo
 - [ ] Exportar historial a Excel
