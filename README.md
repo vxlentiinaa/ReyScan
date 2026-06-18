@@ -1,5 +1,5 @@
 **Proyecto de Diseño Industrial · Bronces Rey · 2026**  
-Estado: Trabajo en proceso
+Estado: Examen
 
 # REYSCAN — Sistema Digital de Inventario y Localización de Piezas
 
