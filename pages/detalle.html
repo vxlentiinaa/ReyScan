@@ -1,119 +1,165 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Detalle — REYSCAN</title>
-  <link rel="stylesheet" href="../css/style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../css/style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;600;700;800&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
 </head>
 <body>
 
-  <nav class="navbar">
-    <a href="../index.html" class="logo">♛ REY<span>SCAN</span></a>
-    <div class="nav-links">
-      <a href="../index.html">Inicio</a>
-      <a href="inventario.html" class="active">Inventario</a>
-      <a href="movimientos.html">Movimientos</a>
-      <a href="ubicaciones.html">Ubicaciones</a>
-    </div>
-    <div class="nav-brand">Bronces Rey</div>
-  </nav>
+<nav class="navbar">
+  <a href="../index.html" class="logo"><span class="logo-crown">♛</span> REY<span>SCAN</span></a>
+  <div class="nav-links">
+    <a href="../index.html">Inicio</a>
+    <a href="inventario.html" class="active">Inventario</a>
+    <a href="movimientos.html">Movimientos</a>
+    <a href="ubicaciones.html">Ubicaciones</a>
+    <a href="cartola.html">Cartola</a>
+  </div>
+  <div class="nav-brand">Bronces Rey</div>
+</nav>
 
-  <main class="container">
+<main class="container">
+  <div style="margin-bottom:20px">
+    <a href="inventario.html" class="link-more" style="font-size:12px">← Volver al inventario</a>
+  </div>
+  <div id="detalle-content"><p style="color:var(--text3)">Cargando pieza...</p></div>
+</main>
 
-    <div style="margin-bottom:20px">
-      <a href="inventario.html" class="link-more" style="font-size:12px">← Volver al inventario</a>
-    </div>
+<footer class="footer">
+  <span>♛ REYSCAN · Bronces Rey © 2026</span>
+  <span>Proyecto Diseño Industrial — trabajo en proceso</span>
+</footer>
 
-    <div id="detalle-content">
-      <p style="color:var(--text3)">Cargando pieza...</p>
-    </div>
+<!-- Three.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="../js/data.js"></script>
+<script src="../js/viewer3d.js"></script>
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const pieza = PIEZAS.find(p => p.id === params.get('id'));
+  const movs = pieza ? MOVIMIENTOS.filter(m => m.pieza === pieza.id) : [];
 
-  </main>
+  if (!pieza) {
+    document.getElementById('detalle-content').innerHTML = '<p style="color:var(--danger)">Pieza no encontrada.</p>';
+  } else {
+    const bajo = pieza.stock <= pieza.minStock;
+    const sc = pieza.stock <= pieza.minStock/2 ? 'var(--danger)' : bajo ? 'var(--warning)' : 'var(--success)';
+    document.title = pieza.name + ' — REYSCAN';
 
-  <footer class="footer">
-    <span>♛ REYSCAN · Bronces Rey © 2026</span>
-    <span>Proyecto de Diseño Industrial — trabajo en proceso</span>
-  </footer>
+    document.getElementById('detalle-content').innerHTML = `
+      <div class="page-title">
+        <h1>${pieza.name}</h1>
+        <div class="gold-line"></div>
+        <p class="subtitle">CÓD: ${pieza.code} · ${pieza.desc}</p>
+      </div>
 
-  <script src="../js/data.js"></script>
-  <script>
-    const params = new URLSearchParams(window.location.search);
-    const id = params.get('id');
-    const pieza = PIEZAS.find(p => p.id === id);
-    const movs = MOVIMIENTOS.filter(m => m.pieza === id);
-
-    if (!pieza) {
-      document.getElementById('detalle-content').innerHTML = '<p style="color:var(--danger)">Pieza no encontrada.</p>';
-    } else {
-      const bajo = pieza.stock <= pieza.minStock;
-      const stockColor = pieza.stock <= pieza.minStock / 2 ? 'var(--danger)' : bajo ? 'var(--warning)' : 'var(--success)';
-
-      document.title = pieza.name + ' — REYSCAN';
-      document.getElementById('detalle-content').innerHTML = `
-
-        <div class="page-title">
-          <h1>${pieza.name}</h1>
-          <p class="subtitle">CÓD: ${pieza.code}</p>
+      <!-- SECCIÓN 3D -->
+      <div class="viewer-3d-card">
+        <div class="viewer-3d-header">
+          <span class="viewer-3d-title">Visualización 3D</span>
+          <span class="viewer-3d-badge">Interactivo</span>
         </div>
-
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px">
-
-          <!-- INFO -->
-          <div>
-            <div class="section-title">Especificaciones</div>
-            <div class="table-wrapper">
-              <table class="data-table">
-                <tbody>
-                  <tr><td class="muted">Material</td><td><strong>${pieza.material}</strong></td></tr>
-                  <tr><td class="muted">Tipo</td><td>${pieza.tipo}</td></tr>
-                  <tr><td class="muted">Diámetro</td><td>${pieza.diametro}</td></tr>
-                  <tr><td class="muted">Stock actual</td><td style="color:${stockColor};font-weight:800;font-size:18px">${pieza.stock} uds</td></tr>
-                  <tr><td class="muted">Stock mínimo</td><td>${pieza.minStock} uds</td></tr>
-                  <tr><td class="muted">Estado</td><td>${bajo ? '<span class="badge bajo">Stock bajo</span>' : '<span class="badge ok">OK</span>'}</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          <!-- UBICACIÓN -->
-          <div>
-            <div class="section-title">Ubicación</div>
-            <div class="shelf-section" style="margin-bottom:0">
-              <h3 style="color:var(--accent);font-size:22px;font-weight:800">${pieza.ubicacion}</h3>
-              <p>Estantería ${pieza.estante} / Nivel ${pieza.nivel} / Caja ${pieza.caja}</p>
-              <a href="ubicaciones.html?id=${pieza.id}" class="btn btn-secondary" style="font-size:11px;display:inline-block;margin-top:4px">Ver en mapa →</a>
-            </div>
-          </div>
+        <div class="viewer-3d-body">
+          <canvas id="canvas3d" style="width:100%;height:380px;display:block;cursor:grab"></canvas>
         </div>
+        <div class="viewer-3d-controls">
+          <span style="font-size:11px;color:var(--text3);font-family:'Open Sans',sans-serif">
+            🖱 Arrastra para rotar · Scroll para zoom
+          </span>
+          <span class="ctrl-sep">|</span>
+          <button class="ctrl-btn active" id="btn-rotate" onclick="toggleRotate(this)">Auto-rotar</button>
+          <button class="ctrl-btn" id="btn-wire" onclick="toggleWire(this)">Wireframe</button>
+          <button class="ctrl-btn" id="btn-explode" onclick="toggleExplode(this)">Vista explodada</button>
+          <button class="ctrl-btn" onclick="viewer.resetView()">Resetear</button>
+          <span class="ctrl-sep">|</span>
+          <span style="font-size:11px;font-family:'Open Sans',sans-serif;color:var(--text3)">
+            Material: <strong style="color:var(--navy)">${pieza.material}</strong>
+          </span>
+        </div>
+      </div>
 
-        <!-- MOVIMIENTOS -->
-        <div class="section-title">Historial de movimientos</div>
-        ${movs.length ? `
-          <div class="table-wrapper" style="margin-bottom:16px">
+      <!-- INFO + UBICACIÓN -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px">
+        <div>
+          <div class="section-title">Especificaciones</div>
+          <div class="table-wrapper">
             <table class="data-table">
-              <thead>
-                <tr><th>Fecha</th><th>Tipo</th><th>Cantidad</th><th>Responsable</th><th>Observación</th></tr>
-              </thead>
               <tbody>
-                ${movs.map(m => `<tr>
-                  <td class="muted">${m.fecha}</td>
-                  <td><span class="badge ${m.tipo}">${m.tipo}</span></td>
-                  <td style="font-weight:700;color:${m.tipo==='entrada'?'var(--success)':'var(--danger)'}">
-                    ${m.tipo==='entrada'?'+':'-'}${m.cantidad} uds
-                  </td>
-                  <td>${m.responsable}</td>
-                  <td class="muted">${m.observacion}</td>
-                </tr>`).join('')}
+                <tr><td class="muted">Material</td><td><strong>${pieza.material}</strong></td></tr>
+                <tr><td class="muted">Tipo</td><td>${pieza.tipo}</td></tr>
+                <tr><td class="muted">Diámetro</td><td>${pieza.diametro}</td></tr>
+                <tr><td class="muted">Stock actual</td>
+                    <td style="color:${sc};font-weight:800;font-family:'Raleway',sans-serif;font-size:18px">${pieza.stock} uds</td></tr>
+                <tr><td class="muted">Stock mínimo</td><td>${pieza.minStock} uds</td></tr>
+                <tr><td class="muted">Estado</td>
+                    <td>${bajo ? '<span class="badge bajo">Stock bajo</span>' : '<span class="badge ok">OK</span>'}</td></tr>
               </tbody>
             </table>
           </div>
-        ` : '<p style="color:var(--text3);font-size:12px;margin-bottom:16px">Sin movimientos registrados aún.</p>'}
+        </div>
+        <div>
+          <div class="section-title">Ubicación en planta</div>
+          <div class="shelf-section" style="margin-bottom:0">
+            <h3 style="color:var(--gold-dark);font-size:24px;font-family:'Raleway',sans-serif">${pieza.ubicacion}</h3>
+            <p>Estantería ${pieza.estante} / Nivel ${pieza.nivel} / Caja ${pieza.caja}</p>
+            <a href="ubicaciones.html?id=${pieza.id}" class="btn btn-secondary" style="font-size:11px;display:inline-block;margin-top:10px">
+              Ver en mapa →
+            </a>
+          </div>
+        </div>
+      </div>
 
-        <a href="movimientos.html#registrar" class="btn btn-primary">Registrar movimiento</a>
-      `;
-    }
-  </script>
+      <!-- HISTORIAL -->
+      <div class="section-title">Historial de movimientos</div>
+      ${movs.length ? `
+        <div class="table-wrapper" style="margin-bottom:16px">
+          <table class="data-table">
+            <thead><tr><th>Fecha</th><th>Tipo</th><th>Cantidad</th><th>Responsable</th><th>Observación</th></tr></thead>
+            <tbody>
+              ${movs.map(m => `<tr>
+                <td class="muted">${m.fecha}</td>
+                <td><span class="badge ${m.tipo}">${m.tipo}</span></td>
+                <td style="font-weight:700;color:${m.tipo==='entrada'?'var(--success)':'var(--danger)'}">
+                  ${m.tipo==='entrada'?'+':'-'}${m.cantidad} uds
+                </td>
+                <td>${m.responsable}</td>
+                <td class="muted">${m.observacion}</td>
+              </tr>`).join('')}
+            </tbody>
+          </table>
+        </div>
+      ` : '<p style="color:var(--text3);font-size:12px;margin-bottom:16px">Sin movimientos registrados aún.</p>'}
+
+      <a href="movimientos.html#registrar" class="btn btn-primary">Registrar movimiento</a>
+    `;
+
+    // Iniciar viewer 3D después de renderizar el HTML
+    requestAnimationFrame(() => {
+      window.viewer = new Viewer3D('canvas3d', pieza);
+      window.wireOn = false;
+      window.explodeOn = false;
+    });
+  }
+
+  function toggleRotate(btn) {
+    const on = viewer.toggleAutoRotate();
+    btn.classList.toggle('active', on);
+    btn.textContent = on ? 'Auto-rotar' : 'Pausado';
+  }
+  function toggleWire(btn) {
+    window.wireOn = !window.wireOn;
+    viewer.setWireframe(window.wireOn);
+    btn.classList.toggle('active', window.wireOn);
+  }
+  function toggleExplode(btn) {
+    window.explodeOn = !window.explodeOn;
+    viewer.explodeView(window.explodeOn);
+    btn.classList.toggle('active', window.explodeOn);
+  }
+</script>
+<script src="../js/session.js"></script>
 </body>
 </html>
