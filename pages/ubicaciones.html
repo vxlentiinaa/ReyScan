@@ -1,209 +1,207 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Ubicaciones — REYSCAN</title>
-  <link rel="stylesheet" href="../css/style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../css/style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;600;700;800&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
 </head>
 <body>
 
-  <nav class="navbar">
-    <a href="../index.html" class="logo">♛ REY<span>SCAN</span></a>
-    <div class="nav-links">
-      <a href="../index.html">Inicio</a>
-      <a href="inventario.html">Inventario</a>
-      <a href="movimientos.html">Movimientos</a>
-      <a href="ubicaciones.html" class="active">Ubicaciones</a>
+<nav class="navbar">
+  <a href="../index.html" class="logo"><span class="logo-crown">♛</span> REY<span>SCAN</span></a>
+  <div class="nav-links">
+    <a href="../index.html">Inicio</a>
+    <a href="inventario.html">Inventario</a>
+    <a href="movimientos.html">Movimientos</a>
+    <a href="ubicaciones.html" class="active">Ubicaciones</a>
+    <a href="cartola.html">Cartola</a>
+  </div>
+  <div class="nav-brand">Bronces Rey</div>
+</nav>
+
+<main class="container">
+  <div class="page-title">
+    <h1>Mapa de Estanterías</h1>
+    <div class="gold-line"></div>
+    <p class="subtitle">Visualización de ubicaciones en planta — Bronces Rey, San Joaquín</p>
+  </div>
+
+  <!-- Buscador -->
+  <div class="search-bar" style="margin-bottom:20px">
+    <input type="text" id="search-ub" placeholder="Buscar pieza para resaltar su ubicación..." oninput="buscarUbicacion(this.value)"/>
+  </div>
+  <div id="resultado-busqueda" style="margin-bottom:20px"></div>
+
+  <!-- Estantería A -->
+  <div class="shelf-section">
+    <h3>Estantería A — Bronce</h3>
+    <p>Bocallaves, bujes, cerraduras y asas</p>
+    <div class="shelf-col-header">
+      <div></div>
+      <div class="shelf-col-label">Caja 01</div>
+      <div class="shelf-col-label">Caja 02</div>
+      <div class="shelf-col-label">Caja 03</div>
+      <div class="shelf-col-label">Caja 04</div>
+      <div class="shelf-col-label">Caja 05</div>
     </div>
-    <div class="nav-brand">Bronces Rey</div>
-  </nav>
+    <div class="shelf-grid" id="shelf-A"></div>
+  </div>
 
-  <main class="container">
-
-    <div class="page-title">
-      <h1>Mapa de Estanterías</h1>
-      <p class="subtitle">Visualización de ubicaciones en planta — Bronces Rey, San Joaquín</p>
+  <!-- Estantería B -->
+  <div class="shelf-section">
+    <h3>Estantería B — Bronce / Zamac</h3>
+    <p>Asas embutidas, engranajes y accesorios</p>
+    <div class="shelf-col-header">
+      <div></div>
+      <div class="shelf-col-label">Caja 01</div>
+      <div class="shelf-col-label">Caja 02</div>
+      <div class="shelf-col-label">Caja 03</div>
+      <div class="shelf-col-label">Caja 04</div>
+      <div class="shelf-col-label">Caja 05</div>
     </div>
+    <div class="shelf-grid" id="shelf-B"></div>
+  </div>
 
-    <!-- BUSCAR PIEZA -->
-    <div class="search-bar" style="margin-bottom:20px">
-      <input type="text" id="search-ub" placeholder="Buscar pieza para resaltar su ubicación..." oninput="buscarUbicacion(this.value)"/>
-    </div>
-    <div id="resultado-busqueda" style="margin-bottom:20px"></div>
-
-    <!-- ESTANTERÍA A -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+    <!-- Estantería C -->
     <div class="shelf-section">
-      <h3>Estantería A</h3>
-      <p>Piezas de bronce — tuercas, bujes, arandelas</p>
+      <h3>Estantería C — Fierro</h3>
+      <p>Pernos, arandelas y tornillos</p>
       <div class="shelf-col-header">
         <div></div>
-        <div class="shelf-col-label">Caja 01</div>
-        <div class="shelf-col-label">Caja 02</div>
-        <div class="shelf-col-label">Caja 03</div>
-        <div class="shelf-col-label">Caja 04</div>
-        <div class="shelf-col-label">Caja 05</div>
+        <div class="shelf-col-label">C01</div>
+        <div class="shelf-col-label">C02</div>
+        <div class="shelf-col-label">C03</div>
+        <div class="shelf-col-label">C04</div>
+        <div class="shelf-col-label">C05</div>
       </div>
-      <div class="shelf-grid" id="shelf-A">
-        <!-- generado por JS -->
-      </div>
+      <div class="shelf-grid" id="shelf-C"></div>
     </div>
-
-    <!-- ESTANTERÍA B -->
+    <!-- Estantería D -->
     <div class="shelf-section">
-      <h3>Estantería B</h3>
-      <p>Piezas de bronce y zamac — pernos, engranajes</p>
+      <h3>Estantería D — Aluminio</h3>
+      <p>Casquillos y piezas mecanizadas</p>
       <div class="shelf-col-header">
         <div></div>
-        <div class="shelf-col-label">Caja 01</div>
-        <div class="shelf-col-label">Caja 02</div>
-        <div class="shelf-col-label">Caja 03</div>
-        <div class="shelf-col-label">Caja 04</div>
-        <div class="shelf-col-label">Caja 05</div>
+        <div class="shelf-col-label">D01</div>
+        <div class="shelf-col-label">D02</div>
+        <div class="shelf-col-label">D03</div>
+        <div class="shelf-col-label">D04</div>
+        <div class="shelf-col-label">D05</div>
       </div>
-      <div class="shelf-grid" id="shelf-B"></div>
+      <div class="shelf-grid" id="shelf-D"></div>
     </div>
+  </div>
 
-    <!-- ESTANTERÍA C / D -->
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
-      <div class="shelf-section">
-        <h3>Estantería C</h3>
-        <p>Aluminio — casquillos, tapas</p>
-        <div class="shelf-col-header">
-          <div></div>
-          <div class="shelf-col-label">C01</div>
-          <div class="shelf-col-label">C02</div>
-          <div class="shelf-col-label">C03</div>
-          <div class="shelf-col-label">C04</div>
-          <div class="shelf-col-label">C05</div>
-        </div>
-        <div class="shelf-grid" id="shelf-C"></div>
-      </div>
-      <div class="shelf-section">
-        <h3>Estantería D</h3>
-        <p>Fierro — tornillos, tuercas</p>
-        <div class="shelf-col-header">
-          <div></div>
-          <div class="shelf-col-label">D01</div>
-          <div class="shelf-col-label">D02</div>
-          <div class="shelf-col-label">D03</div>
-          <div class="shelf-col-label">D04</div>
-          <div class="shelf-col-label">D05</div>
-        </div>
-        <div class="shelf-grid" id="shelf-D"></div>
-      </div>
+  <!-- Leyenda -->
+  <div style="display:flex;gap:20px;margin-top:16px;padding:14px 18px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;flex-wrap:wrap">
+    <div style="display:flex;align-items:center;gap:8px">
+      <div style="width:16px;height:16px;background:#DCFCE7;border:1px solid #86EFAC;border-radius:4px"></div>
+      <span style="font-size:11px;color:var(--text2);font-family:'Open Sans',sans-serif">Ocupado</span>
     </div>
-
-    <!-- LEYENDA -->
-    <div style="display:flex;gap:20px;margin-top:16px;padding:14px 18px;background:var(--bg3);border:1px solid var(--border);border-radius:8px">
-      <div style="display:flex;align-items:center;gap:8px">
-        <div style="width:16px;height:16px;background:#1a2a1a;border:1px solid #2a4a2a;border-radius:4px"></div>
-        <span style="font-size:11px;color:var(--text2)">Ocupado</span>
-      </div>
-      <div style="display:flex;align-items:center;gap:8px">
-        <div style="width:16px;height:16px;background:var(--bg4);border:1px solid var(--border);border-radius:4px"></div>
-        <span style="font-size:11px;color:var(--text2)">Libre</span>
-      </div>
-      <div style="display:flex;align-items:center;gap:8px">
-        <div style="width:16px;height:16px;background:var(--accent);border-radius:4px"></div>
-        <span style="font-size:11px;color:var(--text2)">Seleccionado</span>
-      </div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <div style="width:16px;height:16px;background:var(--bg);border:1px solid var(--border);border-radius:4px"></div>
+      <span style="font-size:11px;color:var(--text2);font-family:'Open Sans',sans-serif">Libre</span>
     </div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <div style="width:16px;height:16px;background:var(--navy);border-radius:4px"></div>
+      <span style="font-size:11px;color:var(--text2);font-family:'Open Sans',sans-serif">Seleccionado</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <div style="width:16px;height:16px;border:2px solid var(--gold);border-radius:4px"></div>
+      <span style="font-size:11px;color:var(--text2);font-family:'Open Sans',sans-serif">Hover</span>
+    </div>
+  </div>
+</main>
 
-  </main>
+<footer class="footer">
+  <span>♛ REYSCAN · Bronces Rey © 2026</span>
+  <span>Proyecto Diseño Industrial — trabajo en proceso</span>
+</footer>
 
-  <footer class="footer">
-    <span>♛ REYSCAN · Bronces Rey © 2026</span>
-    <span>Proyecto de Diseño Industrial — trabajo en proceso</span>
-  </footer>
+<script src="../js/data.js"></script>
+<script>
+  const ocupadas = new Set();
+  const piezaEnCelda = {};
+  PIEZAS.forEach(p => {
+    const key = `${p.estante}-${p.nivel}-${p.caja}`;
+    ocupadas.add(key);
+    piezaEnCelda[key] = p;
+  });
 
-  <script src="../js/data.js"></script>
-  <script>
-    // Ubicaciones ocupadas (estante-nivel-caja)
-    const ocupadas = new Set();
-    const piezaEnCelda = {};
-    PIEZAS.forEach(p => {
-      const key = `${p.estante}-${p.nivel}-${p.caja}`;
-      ocupadas.add(key);
-      piezaEnCelda[key] = p;
-    });
+  let resaltarId = null;
+  const urlId = new URLSearchParams(window.location.search).get('id');
+  if (urlId) resaltarId = urlId;
 
-    let resaltarId = null;
-
-    // Recibe ?id= en URL
-    const params = new URLSearchParams(window.location.search);
-    if (params.get('id')) resaltarId = params.get('id');
-
-    function renderShelf(estante, niveles = 3) {
-      const el = document.getElementById('shelf-' + estante);
-      if (!el) return;
-      let html = '';
-      for (let n = niveles; n >= 1; n--) {
-        html += `<div class="shelf-row-label">N${n.toString().padStart(2,'0')}</div>`;
-        for (let c = 1; c <= 5; c++) {
-          const cStr = c.toString().padStart(2,'0');
-          const key = `${estante}-${n.toString().padStart(2,'0')}-${cStr}`;
-          const pieza = piezaEnCelda[key];
-          const isSelected = pieza && pieza.id === resaltarId;
-          const cls = isSelected ? 'selected' : ocupadas.has(key) ? 'occupied' : 'empty';
-          const label = pieza ? pieza.code : '';
-          const title = pieza ? `${pieza.name} — ${pieza.stock} uds` : 'Libre';
-          html += `<div class="shelf-cell ${cls}" title="${title}" onclick="clickCelda('${key}')">${label}</div>`;
-        }
+  function renderShelf(estante, niveles = 3) {
+    const el = document.getElementById('shelf-' + estante);
+    if (!el) return;
+    let html = '';
+    for (let n = niveles; n >= 1; n--) {
+      html += `<div class="shelf-row-label">N${String(n).padStart(2,'0')}</div>`;
+      for (let c = 1; c <= 5; c++) {
+        const cStr = String(c).padStart(2,'0');
+        const key = `${estante}-${String(n).padStart(2,'0')}-${cStr}`;
+        const pieza = piezaEnCelda[key];
+        const isSel = pieza && pieza.id === resaltarId;
+        const cls   = isSel ? 'selected' : ocupadas.has(key) ? 'occupied' : 'empty';
+        const label = pieza ? pieza.code : '';
+        const title = pieza ? `${pieza.name} — ${pieza.stock} uds` : 'Libre';
+        html += `<div class="shelf-cell ${cls}" title="${title}" onclick="clickCelda('${key}')">${label}</div>`;
       }
-      el.innerHTML = html;
     }
+    el.innerHTML = html;
+  }
 
-    function renderAll() {
-      ['A','B','C','D'].forEach(e => renderShelf(e));
+  function renderAll() { ['A','B','C','D'].forEach(e => renderShelf(e)); }
+
+  function clickCelda(key) {
+    const p = piezaEnCelda[key];
+    if (!p) return;
+    resaltarId = p.id;
+    renderAll();
+    const bajo = p.stock <= p.minStock;
+    const sc = bajo ? 'var(--warning)' : 'var(--success)';
+    document.getElementById('resultado-busqueda').innerHTML = `
+      <div style="background:var(--bg2);border:1px solid var(--gold);border-left:4px solid var(--gold);border-radius:8px;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+        <div>
+          <div style="font-family:'Raleway',sans-serif;font-size:14px;font-weight:700;color:var(--navy)">${p.name}</div>
+          <div style="font-size:11px;color:var(--text2);margin-top:3px;font-family:'Open Sans',sans-serif">
+            CÓD: ${p.code} · Ubicación: <strong style="color:var(--gold-dark)">${p.ubicacion}</strong>
+            · Stock: <strong style="color:${sc}">${p.stock} uds</strong>
+          </div>
+        </div>
+        <a href="detalle.html?id=${p.id}" class="btn btn-primary" style="font-size:11px;white-space:nowrap">Ver detalle + 3D →</a>
+      </div>`;
+  }
+
+  function buscarUbicacion(q) {
+    if (!q) {
+      resaltarId = null;
+      renderAll();
+      document.getElementById('resultado-busqueda').innerHTML = '';
+      return;
     }
-
-    function clickCelda(key) {
-      const p = piezaEnCelda[key];
-      if (!p) return;
+    const p = PIEZAS.find(x =>
+      x.name.toLowerCase().includes(q.toLowerCase()) ||
+      x.code.toLowerCase().includes(q.toLowerCase())
+    );
+    if (p) {
       resaltarId = p.id;
       renderAll();
-      document.getElementById('resultado-busqueda').innerHTML = `
-        <div style="background:var(--bg3);border:1px solid var(--accent);border-radius:8px;padding:14px 18px;display:flex;align-items:center;justify-content:space-between">
-          <div>
-            <div style="font-size:13px;font-weight:700;color:var(--text)">${p.name}</div>
-            <div style="font-size:11px;color:var(--text2);margin-top:2px">CÓD: ${p.code} · Ubicación: <strong style="color:var(--accent)">${p.ubicacion}</strong> · Stock: ${p.stock} uds</div>
-          </div>
-          <a href="detalle.html?id=${p.id}" class="btn btn-secondary" style="font-size:11px">Ver detalle →</a>
-        </div>`;
+      clickCelda(`${p.estante}-${p.nivel}-${p.caja}`);
+    } else {
+      resaltarId = null;
+      renderAll();
+      document.getElementById('resultado-busqueda').innerHTML =
+        `<p style="color:var(--text3);font-size:12px">No se encontró ninguna pieza con ese nombre o código.</p>`;
     }
+  }
 
-    function buscarUbicacion(q) {
-      if (!q) {
-        resaltarId = null;
-        renderAll();
-        document.getElementById('resultado-busqueda').innerHTML = '';
-        return;
-      }
-      const p = PIEZAS.find(x =>
-        x.name.toLowerCase().includes(q.toLowerCase()) ||
-        x.code.toLowerCase().includes(q.toLowerCase())
-      );
-      if (p) {
-        resaltarId = p.id;
-        renderAll();
-        document.getElementById('resultado-busqueda').innerHTML = `
-          <div style="background:var(--bg3);border:1px solid var(--accent);border-radius:8px;padding:14px 18px;display:flex;align-items:center;justify-content:space-between">
-            <div>
-              <div style="font-size:13px;font-weight:700;color:var(--text)">${p.name}</div>
-              <div style="font-size:11px;color:var(--text2);margin-top:2px">Ubicación: <strong style="color:var(--accent)">${p.ubicacion}</strong> · Stock: ${p.stock} uds</div>
-            </div>
-            <a href="detalle.html?id=${p.id}" class="btn btn-secondary" style="font-size:11px">Ver detalle →</a>
-          </div>`;
-      } else {
-        resaltarId = null;
-        renderAll();
-        document.getElementById('resultado-busqueda').innerHTML = `<p style="color:var(--text3);font-size:12px">No se encontró ninguna pieza con ese nombre o código.</p>`;
-      }
-    }
-
-    renderAll();
-  </script>
+  renderAll();
+</script>
+<script src="../js/session.js"></script>
 </body>
 </html>
